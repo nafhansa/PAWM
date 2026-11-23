@@ -1,17 +1,22 @@
 import { Pressable, Text, StyleSheet } from 'react-native';
 import { COLORS } from '../theme/colors';
 
-export default function Button({ title, onPress, variant = 'primary', disabled = false }) {
+// variant: 'primary' (latar biru), 'outline' (garis tepi), atau 'danger' (latar merah)
+export default function Button({
+  title, onPress, variant = 'primary', disabled = false,
+}) {
+  const outline = variant === 'outline';
+  const danger = variant === 'danger';
   return (
     <Pressable
-      onPress={disabled ? undefined : onPress}
-      style={[
+      onPress={onPress}
+      disabled={disabled}
+      style={({ pressed }) => [
         styles.base,
-        variant === 'outline' && styles.outline,
-        disabled && styles.disabled,
-      ]}
-    >
-      <Text style={[styles.label, variant === 'outline' && styles.labelOutline, disabled && styles.labelDisabled]}>
+        outline ? styles.outline : danger ? styles.danger : styles.primary,
+        (pressed || disabled) && styles.dim,
+      ]}>
+      <Text style={[styles.text, outline && styles.textOutline]}>
         {title}
       </Text>
     </Pressable>
@@ -19,31 +24,13 @@ export default function Button({ title, onPress, variant = 'primary', disabled =
 }
 
 const styles = StyleSheet.create({
-  base: {
-    height: 44,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 16,
-    backgroundColor: COLORS.primary,
-  },
-  outline: {
-    backgroundColor: COLORS.card,
-    borderWidth: 1,
-    borderColor: COLORS.primary,
-  },
-  disabled: {
-    backgroundColor: COLORS.border,
-  },
-  label: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    color: COLORS.card,
-  },
-  labelOutline: {
-    color: COLORS.primary,
-  },
-  labelDisabled: {
-    color: COLORS.muted,
-  },
+  base: { paddingVertical: 14, paddingHorizontal: 20,
+    borderRadius: 10, alignItems: 'center' },
+  primary: { backgroundColor: COLORS.primary },
+  outline: { borderWidth: 1.5, borderColor: COLORS.primary,
+    backgroundColor: COLORS.card },
+  danger: { backgroundColor: COLORS.danger },
+  dim: { opacity: 0.5 },
+  text: { color: COLORS.white, fontSize: 16, fontWeight: 'bold' },
+  textOutline: { color: COLORS.primary },
 });

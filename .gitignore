@@ -39,3 +39,7 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# iCloud: node_modules disimpan di folder .nosync (lihat symlink node_modules)
+node_modules
+node_modules.nosync/

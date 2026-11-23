@@ -1,35 +1,30 @@
-import { Pressable, Text, View, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../theme/colors';
 
-export default function HeaderBar({ title, onBack }) {
+export default function HeaderBar({ title, subtitle, onBack }) {
+  const insets = useSafeAreaInsets(); // jarak aman dari notch
   return (
-    <View style={styles.bar}>
+    <View style={[styles.bar, { paddingTop: insets.top + 12 }]}>
       {onBack ? (
-        <Pressable onPress={onBack} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={22} color={COLORS.card} />
+        <Pressable onPress={onBack} hitSlop={10} style={styles.back}>
+          <Ionicons name="arrow-back" size={24} color={COLORS.white} />
         </Pressable>
       ) : null}
-      <Text style={styles.title}>{title}</Text>
+      <View>
+        <Text style={styles.title}>{title}</Text>
+        {subtitle ? <Text style={styles.sub}>{subtitle}</Text> : null}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  bar: {
-    height: 48,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    borderRadius: 8,
+  bar: { flexDirection: 'row', alignItems: 'center',
     backgroundColor: COLORS.primary,
-  },
-  backButton: {
-    marginRight: 8,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: COLORS.card,
-  },
+    paddingHorizontal: 16, paddingBottom: 14 },
+  back: { marginRight: 12 },
+  title: { color: COLORS.white, fontSize: 20, fontWeight: 'bold' },
+  sub: { color: COLORS.headerSub, fontSize: 13, marginTop: 2 },
 });

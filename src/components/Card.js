@@ -1,13 +1,22 @@
-import { Pressable, Image, Text, View, StyleSheet } from 'react-native';
+import { Pressable, View, Text, Image, StyleSheet } from 'react-native';
+import Rating from './Rating';
 import { COLORS } from '../theme/colors';
 
-export default function Card({ title, price, image, onPress }) {
+export default function Card({ title, price, image, discount, rating, onPress }) {
   return (
     <Pressable style={styles.card} onPress={onPress}>
-      <Image source={image} style={styles.image} />
+      <View>
+        <Image source={{ uri: image }} style={styles.image} />
+        {discount ? (
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>-{discount}%</Text>
+          </View>
+        ) : null}
+      </View>
       <View style={styles.body}>
-        <Text style={styles.title} numberOfLines={1}>{title}</Text>
+        <Text style={styles.title} numberOfLines={2}>{title}</Text>
         <Text style={styles.price}>$ {price}</Text>
+        {rating ? <Rating value={rating} /> : null}
       </View>
     </Pressable>
   );
@@ -15,27 +24,18 @@ export default function Card({ title, price, image, onPress }) {
 
 const styles = StyleSheet.create({
   card: {
-    width: 150,
-    borderRadius: 8,
-    backgroundColor: COLORS.card,
-    overflow: 'hidden',
+    flex: 1, margin: 6, backgroundColor: COLORS.card,
+    borderRadius: 12, overflow: 'hidden',
+    elevation: 2, // bayangan Android
+    shadowColor: COLORS.shadow, shadowOpacity: 0.1, // bayangan iOS
+    shadowRadius: 6, shadowOffset: { width: 0, height: 2 },
   },
-  image: {
-    width: '100%',
-    height: 90,
-    backgroundColor: COLORS.border,
-  },
-  body: {
-    padding: 8,
-  },
-  title: {
-    fontSize: 13,
-    fontWeight: 'bold',
-    color: COLORS.text,
-  },
-  price: {
-    fontSize: 12,
-    color: COLORS.accent,
-    marginTop: 4,
-  },
+  image: { width: '100%', aspectRatio: 1, backgroundColor: COLORS.placeholder },
+  badge: { position: 'absolute', top: 8, left: 8,
+    backgroundColor: COLORS.accent, borderRadius: 6,
+    paddingHorizontal: 6, paddingVertical: 2 },
+  badgeText: { color: COLORS.card, fontSize: 12, fontWeight: 'bold' },
+  body: { padding: 10 },
+  title: { fontSize: 14, color: COLORS.text, minHeight: 36 },
+  price: { marginTop: 4, fontWeight: 'bold', color: COLORS.accent },
 });

@@ -1,47 +1,36 @@
-import { TextInput, Text, View, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../theme/colors';
 
-export default function CustomInput({ label, value, onChangeText, error, secureTextEntry, keyboardType }) {
+export default function CustomInput({ label, error, icon, ...rest }) {
   return (
     <View style={styles.wrapper}>
       {label ? <Text style={styles.label}>{label}</Text> : null}
-      <TextInput
-        style={[styles.input, error && styles.inputError]}
-        value={value}
-        onChangeText={onChangeText}
-        secureTextEntry={secureTextEntry}
-        keyboardType={keyboardType}
-        placeholderTextColor={COLORS.muted}
-      />
+      <View style={[styles.inputRow, error && styles.inputError]}>
+        {icon ? (
+          <Ionicons name={icon} size={20} color={COLORS.muted} style={styles.icon} />
+        ) : null}
+        <TextInput
+          style={styles.input}
+          placeholderTextColor={COLORS.muted}
+          {...rest}
+        />
+      </View>
       {error ? <Text style={styles.error}>{error}</Text> : null}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
-    marginBottom: 12,
+  wrapper: { marginBottom: 14 },
+  label: { marginBottom: 6, fontWeight: '600', color: COLORS.text },
+  inputRow: {
+    flexDirection: 'row', alignItems: 'center',
+    borderWidth: 1, borderColor: COLORS.border, borderRadius: 10,
+    paddingHorizontal: 12, backgroundColor: COLORS.card,
   },
-  label: {
-    fontSize: 12,
-    color: COLORS.muted,
-    marginBottom: 4,
-  },
-  input: {
-    height: 40,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    backgroundColor: COLORS.card,
-    color: COLORS.text,
-  },
-  inputError: {
-    borderColor: COLORS.danger,
-  },
-  error: {
-    fontSize: 11,
-    color: COLORS.danger,
-    marginTop: 4,
-  },
+  icon: { marginRight: 8 },
+  input: { flex: 1, paddingVertical: 10, fontSize: 15, color: COLORS.text },
+  inputError: { borderColor: COLORS.danger },
+  error: { marginTop: 4, color: COLORS.danger, fontSize: 12 },
 });
